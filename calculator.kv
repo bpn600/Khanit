@@ -1,0 +1,1152 @@
+#:import dp kivy.metrics.dp
+
+<CustomAccordionItem>
+    canvas.before:
+        Color:
+            rgba: (0.4, 0.6, 0.8, 1)
+        RoundedRectangle:
+            pos: self.pos
+            size: self.size
+            radius: [12, 12, 12, 12]
+
+<CustomTextInput@TextInput>:
+    text: ''
+    font_size: min(self.height * 0.3, self.width * 0.45)
+    size_hint: None, None
+    size: root.parent.width * 3.5, root.parent.height * 1.5
+    multiline: False
+    readonly: True
+    background_color: app.theme_input_background
+    foreground_color: app.theme_input_text
+    font_name: 'assets/font/CODE2000.TTF'
+
+    canvas.before:
+        Color:
+            rgba: app.theme_border
+        Line:
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 5)
+            width: 2
+
+<NumberButton>:
+    text:
+        (root.limbu_numbers.get(str(root.number_value), '') + '\n' +
+        root.nepali_numbers.get(str(root.number_value), '') + '  ' +
+        str(root.number_value))
+    font_size: min(self.height * 0.3, self.width * 0.45)
+    color: app.theme_text
+    background_color: (0, 0, 0, 0)
+    background_normal: ''
+    on_press: app.root.get_screen('main').children[0].add_number(root.number_value)
+
+    canvas.before:
+        Color:
+            rgba: root.border_color
+        Line:
+            rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+            width: 2
+
+<NumberPadContainer>:
+    orientation: 'vertical'
+    western_display: western_display
+    limbu_display: limbu_display
+    nepali_display: nepali_display
+
+    # Display area
+    BoxLayout:
+        orientation: 'vertical'
+        size_hint: (1, 0.2)
+        spacing: dp(5)
+        padding: dp(8)
+
+        # Limbu numbers display
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1, 0.4)
+            ScrollView:
+                do_scroll_x: True
+                do_scroll_y: False
+                bar_width: dp(1)
+                bar_color: [0, 0.5, 0.8, 1]
+                CustomTextInput:
+                    id: limbu_display
+
+        # Nepali numbers display
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1, 0.4)
+            ScrollView:
+                do_scroll_x: True
+                do_scroll_y: False
+                bar_width: dp(1)
+                bar_color: [0, 0.5, 0.8, 1]
+                CustomTextInput:
+                    id: nepali_display
+
+        # Western numbers display
+        BoxLayout:
+            orientation: 'vertical'
+            size_hint: (1, 0.4)
+            ScrollView:
+                do_scroll_x: True
+                do_scroll_y: False
+                bar_width: dp(1)
+                bar_color: [0, 0.5, 0.8, 1]
+                CustomTextInput:
+                    id: western_display
+
+    # Gap between Number pad label & TextInput
+    Label:
+        text: ''
+        size_hint: (1, 0.002)
+
+    # Number pad grid
+    GridLayout:
+        cols: 4
+        spacing: dp(5)
+        size_hint: (1, 0.4)
+        padding: dp(8)
+
+        # Numbers design
+        NumberButton:
+            number_value: 0
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        Button:
+            text: 'AC'
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            background_color: (0, 0, 0, 0)
+            color: (0.7, 0.1, 0.1, 1)
+            background_normal: ''
+            on_press: root.clear_all(self)
+            canvas.before:
+                Color:
+                    rgba: (0.7, 0.3, 0.3, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+        Button:
+            text: 'DEL'
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            background_color: (0, 0, 0, 0)
+            color: (0.7, 0.1, 0.1, 1)
+            background_normal: ''
+            on_press: root.delete(self)
+            canvas.before:
+                Color:
+                    rgba: (0.7, 0.3, 0.3, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.2
+        Button:
+            text: '⌫'
+            font_size: min(self.height * 0.4, self.width * 0.45)
+            background_color: (0, 0, 0, 0)
+            color: (0.7, 0.1, 0.1, 1)
+            font_name: 'assets/font/CODE2000.TTF'
+            background_normal: ''
+            on_press: root.backspace(self)
+            canvas.before:
+                Color:
+                    rgba: (0.7, 0.3, 0.3, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+
+        NumberButton:
+            number_value: 1
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 2
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 3
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        Button:
+            text: "÷"
+            on_release: root.add_operator('÷')
+            size_hint: 1, 1
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+
+        NumberButton:
+            number_value: 4
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 5
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 6
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        Button:
+            text: "×"
+            on_release: root.add_operator('×')
+            size_hint: 1, 1
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+
+        NumberButton:
+            number_value: 7
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 8
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        NumberButton:
+            number_value: 9
+            border_color: (0.4, 0.6, 0.8, 1)
+
+        Button:
+            text: "-"
+            on_release: root.add_operator('-')
+            size_hint: 1, 1
+            font_size: min(self.height * 0.4, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+
+        Button:
+            text: "."
+            on_release: root.add_decimal()
+            size_hint: 1, 1
+            font_size: min(self.height * 0.4, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+        Button:
+            text: "%"
+            on_release: root.add_percent()
+            size_hint: 1, 1
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+        Button:
+            text: "+"
+            on_release: root.add_operator('+')
+            size_hint: 1, 1
+            font_size: min(self.height * 0.3, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+        Button:
+            text: "="
+            on_release: root.calculate_result()
+            size_hint: 1, 1
+            font_size: min(self.height * 0.4, self.width * 0.45)
+            color: (0, 0, 1, 1)
+            background_color: (0, 0, 0, 0)
+            background_normal: ''
+            canvas.before:
+                Color:
+                    rgba: (0/255, 128/255, 255/255, 1)
+                Line:
+                    rounded_rectangle: (self.x, self.y, self.width, self.height, 10)
+                    width: 1.01
+
+    # BottomAppBar
+    MDFloatLayout:
+        size_hint: (1, 0.05)
+        md_bg_color: (0.4, 0.6, 0.8, 1)
+
+        MDIconButton:
+            icon: 'history'
+            pos_hint: {'center_y': 0.5, 'center_x': 0.06}
+            theme_icon_color: "Custom"
+            icon_color: 1, 1, 1, 1
+            background_color: 0, 0, 0, 0
+            background_normal: ''
+            on_release: root.show_history()
+
+        # HELP
+        MDIconButton:
+            id: help
+            icon: 'dots-horizontal-circle-outline'
+            pos_hint: {'center_y': 0.5, 'center_x': 0.94}
+            theme_icon_color: "Custom"
+            icon_color: 1, 1, 1, 1
+            background_color: 0, 0, 0, 0
+            background_normal: ''
+            on_release: root.show_help()
+
+
+<HelpScreen>:
+    name: 'help'
+
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: dp(0)
+        spacing: dp(5)
+        elevation: 6
+
+        MDTopAppBar:
+            title: "Settings & Information"
+            md_bg_color: (0.4, 0.6, 0.8, 1)
+            elevation: 6
+            left_action_items: [["book-open-outline", lambda x: root.open_bottom_sheet()]]
+            right_action_items: [["close", lambda x: root.go_back()]]
+
+
+        # HELP CONTENT
+        MDScrollView:
+            MDBoxLayout:
+                orientation: "vertical"
+                adaptive_height: True
+                padding: dp(16)
+                spacing: dp(12)
+
+                MDLabel:
+                    text: "Menu"
+                    font_style: "H5"
+                    size_hint_y: None
+                    height: self.texture_size[1]
+
+                MDCard:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    padding: dp(10)
+                    radius: [15]
+                    md_bg_color: app.theme_surface
+                    line_color: app.theme_border
+                    line_width: dp(0.3)
+
+                    MDLabel:
+                        text: "Theme"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                    TwoLineIconListItem:
+                        id: appearance_item
+                        text: "Apperance:"
+                        #secondary_text: "Choose light or dark mode."
+                        secondary_text: root.get_theme_description()
+                        on_release: root.toggle_theme()
+                        IconLeftWidget:
+                            icon: "theme-light-dark"
+                            icon: root.get_theme_icon()
+
+                MDGridLayout:
+                    cols: 1
+                    adaptive_height: True
+                    spacing: dp(1)
+                    padding: dp(1)
+                    #md_bg_color: 0,0,1,0.5
+                    MDLabel:
+                        text: "Learn Sirijanga Numbers"
+                        font_style: "H5"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                    MDList:
+                        OneLineIconListItem:
+                            text: "Reading Numbers"
+                            on_press: root.open_limbu_number_trace()
+                            IconLeftWidget:
+                                icon: "read"
+                                on_press: root.open_limbu_number_trace()
+                        OneLineIconListItem:
+                            text: "Writing Numbers"
+                            on_press: root.open_limbu_number_trace()
+                            IconLeftWidget:
+                                icon: "pencil"
+                                on_press: root.open_limbu_number_trace()
+                        OneLineIconListItem:
+                            text: "Quiz"
+                            on_press: root.open_limbu_number_trace()
+                            IconLeftWidget:
+                                icon: "alpha-q-box-outline"   #alpha-q-circle-outline
+                                on_press: root.open_limbu_number_trace()
+
+                MDList:
+                    MDLabel:
+                        text: '[b]Communicate[/b]'
+                        font_style: 'H5'
+                        theme_text_color: "Primary"
+                        halign: "left"
+                        markup: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                    TwoLineIconListItem:
+                        text: "Update"
+                        secondary_text: "Update for latest features"
+                        on_press: root.update_khanit()
+                        IconLeftWidget:
+                            icon: "upload-outline"
+                            on_press: root.update_khanit()
+
+                    TwoLineIconListItem:
+                        text: "Share"
+                        secondary_text: "Share app with your friends & family."
+                        on_press: root.share_khanit()
+                        IconLeftWidget:
+                            icon: "share-variant-outline"
+                            on_press: root.share_khanit()
+
+                    TwoLineIconListItem:
+                        text: "Rate Us"
+                        secondary_text: "Rate this App by giving STARS."
+                        on_press: root.rate_khanit()
+                        IconLeftWidget:
+                            icon: "star-circle-outline"
+                            on_press: root.rate_khanit()
+
+                    TwoLineIconListItem:
+                        text: "Feedback"
+                        secondary_text: "Questions or Feedback? Contact Us."
+                        IconLeftWidget:
+                            icon: "email-outline"
+
+                Widget:
+
+                MDCard:
+                    orientation: 'vertical'
+                    adaptive_height: True
+                    padding: dp(10)
+                    radius: [15]
+                    md_bg_color: 0,0,1,0.5
+
+                    MDLabel:
+                        text: "Khanit:"
+                        font_style: "H5"
+                        halign: "left"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDLabel:
+                        text: "Tri-Language Smart Calculator"
+                        font_style: "H5"
+                        halign: "center"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDLabel:
+                        text: "Supports Kirat, Nepali & English\n"
+                        font_style: "Body1"
+                        halign: "center"
+                        theme_text_color: "Secondary"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    MDCard:
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        padding: dp(3)
+                        radius: [15]
+
+                        MDLabel:
+                            text: "This unique trilingual Khanit app brings everything together on a single screen, making calculations easy to understand, compare, and use.\n\nWhether you're at home, school, work, or managing a business, the app makes everyday calculations simple, clear, convenient, and accessible."
+                            font_style: "Body1"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                # IT Training (LABA)
+                MDList:
+                    pos_hint: {"center_x": 0.5, "center_y": 0.5}
+                    MDLabel:
+                        text: '[b]IT Training Center[/b]'
+                        font_style: 'H5'
+                        theme_text_color: "Primary"
+                        halign: "center"
+                        markup: True
+                        size_hint_y: None
+                        height: self.texture_size[1]
+                    MDLabel:
+                        text: "LABA is a leading IT training provider, offering flexible learning options — in-person classes, on-site training, and online courses — all delivered directly by top global industry experts."
+                        adaptive_height: True
+                        font_name: "assets/font/CODE2000.TTF"
+                        markup: True
+                        theme_text_color: "Primary"
+                        font_style: "Body1"
+                        halign: "center"
+                        size_hint_y: None
+                        height: self.texture_size[1]
+
+                    TwoLineListItem:
+                        text: "www.labanepal.com"
+                        secondary_text: "Visit Us To Believe Us!"
+                        on_press: root.open_laba_link()
+
+                # Mobile App Dev
+                MDCard:
+                    orientation: "vertical"
+                    adaptive_height: True
+                    radius: [15]
+                    md_bg_color: 0.69, 0.85, 0.98, 1
+                    line_color: 1.00, 0.60, 0.00, 1
+                    line_width: 2
+                    style: "outlined"
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        padding: [dp(15),dp(15),dp(1),dp(1)]
+                        spacing: dp(10)
+                        MDLabel:
+                            text: 'Mobile App Development'
+                            bold: True
+                            font_name: "assets/font/CODE2000.TTF"
+                            markup: True
+                            font_style: "H5"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                        MDLabel:
+                            text: "LABA Nepal UK designs and develops intuitive mobile applications that deliver seamless user experiences across iOS and Android platforms. Our team builds apps with modern frameworks and scalable architecture, ensuring high performance, security, and adaptability. From concept to deployment, we provide end?to?end solutions including UI/UX design, backend integration, and ongoing support, helping businesses engage customers and expand their digital presence."
+                            adaptive_height: True
+                            font_name: "assets/font/CODE2000.TTF"
+                            markup: True
+                            theme_text_color: "Primary"
+                            font_style: "Body1"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                        MDRectangleFlatIconButton:
+                            id: read_full_atmananda
+                            icon: "arrow-right"
+                            text: "More..."
+                            theme_text_color: "Custom"
+                            text_color: [1.00, 0.60, 0.00, 1]
+                            icon_color: [1.00, 0.60, 0.00, 1]
+                            pos_hint: {"right": 1}
+                            line_color: 1.00, 0.60, 0.00, 1
+                            line_width: 2
+                            style: "outlined"
+                            on_release: root.open_labauk_link()
+
+                MDList:
+                    # Title Section
+                    MDGridLayout:
+                        cols: 2
+                        adaptive_height: True
+                        spacing: dp(20)
+                        padding: dp(20)
+
+                        MDLabel:
+                            text: '[b]Artificial Intelligence Solutions[/b]'
+                            pos_hint: {"center_x": .5, "center_y": .5}
+                            font_style: 'H6'
+                            markup: True
+                            theme_text_color: "Custom"
+                            text_color: 0/255, 128/255, 128/255, 1
+                            halign: 'center'
+
+                        MDIconButton:
+                            icon: "arrow-right-circle-outline"
+                            pos_hint: {"center_x": .5, "center_y": .5}
+                            on_release: root.open_labauk_AIlink()
+
+                # IT Audit
+                MDCard:
+                    orientation: "vertical"
+                    adaptive_height: True
+                    radius: [15]
+                    md_bg_color: 1.00, 0.88, 0.70, 0.5
+                    line_color: 0.00, 0.59, 0.53, 1
+                    line_width: 2
+                    style: "outlined"
+
+                    MDBoxLayout:
+                        orientation: 'vertical'
+                        adaptive_height: True
+                        padding: [dp(15),dp(15),dp(1),dp(1)]
+                        spacing: dp(10)
+                        MDLabel:
+                            text: 'IT Audit & Compliance'
+                            bold: True
+                            font_name: "assets/font/CODE2000.TTF"
+                            markup: True
+                            font_style: "H5"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                        MDLabel:
+                            text: "Cube Technologies provides comprehensive cybersecurity solutions to help businesses strengthen digital resilience. From penetration testing and infrastructure design to compliance and forensics, we ensure your operations stay secure, compliant, and future-ready."
+                            adaptive_height: True
+                            font_name: "assets/font/CODE2000.TTF"
+                            markup: True
+                            font_style: "Body1"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+
+                        MDRectangleFlatIconButton:
+                            icon: "arrow-right"
+                            text: "More..."
+                            theme_text_color: "Custom"
+                            text_color: [0.00, 0.59, 0.53, 1]
+                            icon_color: [0.00, 0.59, 0.53, 1]
+                            pos_hint: {"right": 1}
+                            line_color: 0.00, 0.59, 0.53, 1
+                            line_width: 2
+                            style: "outlined"
+                            on_release: root.open_cube_link()
+
+    # MODAL BOTTOM SHEET
+    MDBottomSheet:
+        id: bottom_sheet
+        # KivyMD 1.2.0
+        type: "modal"
+        adaptive_height: True
+        max_opening_height: dp(600)
+        default_opening_height: dp(550)
+
+        # BOTTOM SHEET CONTENT
+        MDBottomSheetContent:
+            id: sheet_content
+            orientation: "vertical"
+            padding: dp(16)
+            spacing: dp(8)
+
+            # HEADER
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(56)
+
+                MDLabel:
+                    text: "Choose an Option"
+                    font_style: "H6"
+                    bold: True
+                    valign: "center"
+
+                MDIconButton:
+                    icon: "close"
+                    pos_hint: {"center_y": .5}
+                    on_release: root.close_bottom_sheet()
+
+            # SEPARATOR
+            MDSeparator:
+
+            # SCROLLABLE MENU
+            MDScrollView:
+                id: sheet_scroll
+                size_hint_y: None
+                height: dp(410)
+                size_hint_x: 1
+                do_scroll_x: False
+                do_scroll_y: True
+
+                # DYNAMIC MDLIST
+                MDList:
+                    id: sheet_list
+                    size_hint_y: None
+                    height: self.minimum_height
+                    size_hint_x: 1
+
+            # SEPARATOR
+            MDSeparator:
+
+            # Small bottom spacing.
+            Widget:
+                size_hint_y: None
+                height: dp(8)
+
+<LimbuNumberTrace>:
+    MDBoxLayout:
+        orientation: "vertical"
+
+        # TOP APP BAR
+        MDTopAppBar:
+            title: "Learning Sirijanga Numbers"
+            elevation: 4
+            left_action_items: [["arrow-left", lambda x: root.close_screen()]]
+
+        # TABBED PANEL
+        TabbedPanel:
+            id: number_tabs
+            do_default_tab: False
+            tab_width: dp(145)
+            tab_height: dp(48)
+            allow_stretch: False
+            border: [dp(1), dp(1), dp(1), dp(1)]
+
+            # SIRIJANGA NUMBER TAB
+            TabbedPanelItem:
+                text: "Sirijanga Number"
+                color: 1, 1, 1, 1
+
+                MDScrollView:
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        adaptive_height: True
+                        padding: dp(12)
+                        spacing: dp(12)
+
+                        # TITLE
+                        MDLabel:
+                            text: "Sirijanga Numbers"
+                            font_style: "H4"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # DESCRIPTION
+                        MDLabel:
+                            text: "Learn the Sirijanga/Limbu digits from 0 to 9"
+                            font_style: "Body1"
+                            halign: "center"
+                            size_hint_y: None
+                            height: self.texture_size[1]
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        Widget:
+
+                        # LARGE NUMBER DISPLAY
+                        MDCard:
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: dp(280)
+                            padding: dp(5)
+                            spacing: dp(15)
+                            radius: [20]
+                            #md_bg_color: 0.94, 0.96, 0.76, 1
+                            md_bg_color: app.theme_surface
+
+                            MDGridLayout:
+                                cols: 2
+                                padding: dp(5)
+                                spacing : dp(5)
+
+                                MDLabel:
+                                    id: trace_number
+                                    text: "᥆"
+                                    font_name: "assets/font/CODE2000.TTF"
+                                    font_size: dp(96)
+                                    halign: "right"
+                                    valign: "middle"
+                                    size_hint_y: .65
+                                    #md_bg_color: 0,0,1,1
+                                    size_hint_x: None
+                                    width: dp(100)
+                                MDLabel:
+                                    id: trace_word
+                                    text: "ᤜᤥᤵ"
+                                    font_name: "assets/font/CODE2000.TTF"
+                                    font_size: dp(35)
+                                    halign: "left"
+                                    valign: "center"
+                                    #size_hint_y: None
+                                    #height: dp(45)
+                                    #md_bg_color: 0,0,1,1
+
+                            MDLabel:
+                                id: trace_number_nepali
+                                text: "०"
+                                font_name: "assets/font/CODE2000.TTF"
+                                font_size: dp(48)
+                                halign: "center"
+                                size_hint_y: .15
+
+                            MDLabel:
+                                id: trace_number_english
+                                text: "0"
+                                font_size: dp(48)
+                                halign: "center"
+                                size_hint_y: .2
+
+                        # NUMBER SELECTOR
+                        MDGridLayout:
+                            cols: 5
+                            adaptive_height: True
+                            spacing: dp(8)
+                            #padding: dp(5)
+                            #md_bg_color: "#FFFFFF"
+                            #size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "0 | ०"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(0)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "1 | १"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(1)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "2 | २"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(2)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "3 | ३"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(3)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "4 | ४"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(4)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "5 | ५"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(5)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "6 | ६"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(6)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "7 | ७"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(7)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "8 | ८"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(8)
+                                size_hint: 1,1
+
+                            MDRaisedButton:
+                                text: "9 | ९"
+                                font_name: "assets/font/CODE2000.TTF"
+                                on_release: root.select_number(9)
+                                size_hint: 1,1
+
+                        # PREVIOUS / NEXT
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(55)
+                            spacing: dp(15)
+
+                            MDRaisedButton:
+                                text: "PREVIOUS"
+                                size_hint_x: .5
+                                on_release: root.previous_number()
+
+                            MDRaisedButton:
+                                text: "NEXT"
+                                size_hint_x: .5
+                                on_release: root.next_number()
+
+            # WRITE NUMBERS TAB
+            TabbedPanelItem:
+                text: "Write Numbers"
+                #on_release: root.on_write_tab()
+                # Tab title
+                color: 1, 1, 1, 1
+
+                MDScrollView:
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        adaptive_height: True
+                        padding: dp(12), dp(10), dp(12), dp(20)
+                        spacing: dp(10)
+
+                        # WRITE TITLE
+                        MDLabel:
+                            text: "Write / Trace Sirijanga Number"
+                            font_style: "H5"
+                            halign: "center"
+                            size_hint_y: None
+                            height: dp(40)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # PROGRESS LABEL
+                        MDBoxLayout:
+                            size_hint_y: None
+                            height: dp(40)
+                            spacing: dp(10)
+                            orientation: "horizontal"
+
+                            MDLabel:
+                                id: progress_label
+                                text: "Stroke 0/1"
+                                font_size: sp(15)
+                                halign: "center"
+                                size_hint_y: None
+                                height: dp(35)
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+                                size_hint_x: 0.30
+                                valign: "middle"
+                                text_size: self.size
+
+                             # PROGRESS BAR
+                            MDProgressBar:
+                                id: progress_bar
+                                value: 0
+                                size_hint_y: None
+                                height: dp(5)
+                                pos_hint: {"center_y": 0.5}
+                                # MDProgressBar has no font.
+                                # This controls the progress indicator color.
+                                color: 1, 1, 1, 1
+
+                        # NUMBER CARD
+                        MDCard:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(75)
+                            padding: dp(8)
+                            spacing: dp(5)
+                            radius: [dp(15)]
+                            md_bg_color: 0.12, 0.12, 0.12, 1
+
+                            # SIRIJANGA NUMBER
+                            MDLabel:
+                                id: show_number_sirijanga
+                                text: "᥆"
+                                font_name: "assets/font/CODE2000.TTF"
+                                font_size: dp(96)
+                                halign: "center"
+                                valign: "center"
+                                size_hint_x: .25
+                                theme_text_color: "Custom"
+                                text_color: 1, 1, 1, 1
+
+                            # NAME + STROKES
+                            MDBoxLayout:
+                                orientation: "vertical"
+                                spacing: dp(1)
+                                size_hint_x: 0.50
+
+                                MDLabel:
+                                    id: num_name
+                                    text: "Hop (Zero)"
+                                    font_size: sp(17)
+                                    bold: True
+                                    halign: "left"
+                                    valign: "middle"
+                                    text_size: self.width, None
+                                    size_hint_y: 0.60
+                                    theme_text_color: "Custom"
+                                    text_color: 1, 1, 1, 1
+
+                                MDLabel:
+                                    id: stroke_info
+                                    #text: "Freehand writing"
+                                    text: "Strokes: 0/1"
+                                    font_size: sp(14)
+                                    valign: "middle"
+                                    text_size: self.width, None
+                                    theme_text_color: "Custom"
+                                    text_color: 1, 1, 1, 1
+
+                            # AUDIO
+                            MDIconButton:
+                                id: play_btn
+                                icon: "play-circle"
+                                icon_size: dp(40)
+                                size_hint_x: .20
+                                pos_hint: {"center_y": 0.5}
+                                theme_icon_color: "Custom"
+                                icon_color: 1, 1, 1, 1
+                                on_release: root.play_audio()
+
+                        # TRACE CANVAS
+                        MDCard:
+                            orientation: "vertical"
+                            size_hint_y: None
+                            height: dp(270)
+                            padding: dp(10)
+                            radius: [dp(18)]
+                            md_bg_color: 0.95, 0.95, 0.95, 1
+
+                            LimbuTracePad:
+                                id: trace_pad
+                                size_hint: 1, 1
+
+                        # INSTRUCTION
+                        MDLabel:
+                            text: "Use your finger or mouse to trace the number above."
+                            #text:"Trace the guide using your finger or mouse."
+                            halign: "center"
+                            size_hint_y: None
+                            height: dp(35)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # ACTION BUTTONS
+                        MDBoxLayout:
+                            orientation: "horizontal"
+                            size_hint_y: None
+                            height: dp(52)
+                            spacing: dp(8)
+
+                            MDRaisedButton:
+                                text: "UNDO"
+                                size_hint_x: .25
+                                on_release: root.undo_trace()
+
+                            MDRaisedButton:
+                                text: "CLEAR"
+                                size_hint_x: .25
+                                on_release: root.clear_trace()
+
+                            MDRaisedButton:
+                                text: "PREVIOUS"
+                                size_hint_x: 0.25
+                                #size_hint_y: None
+                                #height: dp(42)
+                                on_release: root.previous_number()
+
+                            MDRaisedButton:
+                                text: "NEXT"
+                                size_hint_x: .25
+                                on_release:
+                                    root.next_number()
+                                    root.clear_trace()
+
+            # QUIZ TAB
+            TabbedPanelItem:
+                text: "Quiz"
+                color: 1, 1, 1, 1
+
+                MDScrollView:
+                    MDBoxLayout:
+                        orientation: "vertical"
+                        adaptive_height: True
+                        padding: dp(12)
+                        spacing: dp(12)
+
+                        # QUIZ TITLE
+                        MDLabel:
+                            text: "Practice Sirijanga Numbers"
+                            font_style: "H5"
+                            halign: "center"
+                            size_hint_y: None
+                            height: dp(45)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                         # QUESTION
+                        MDLabel:
+                            id: quiz_question
+                            text: " "
+                            font_style: "H4"
+                            halign: "center"
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # INSTRUCTION
+                        MDLabel:
+                            #text: "Choose the correct answer from below:"
+                            text: "Choose the correct Kirat Sirijanga number:"
+                            font_style: "Caption"
+                            halign: "center"
+                            size_hint_y: None
+                            height: dp(40)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # ANSWER BUTTONS
+                        MDGridLayout:
+                            id: answer_grid
+                            cols: 2
+                            adaptive_height: True
+                            spacing: dp(8)
+                            #padding: dp(12)
+
+                        # RESULT
+                        MDLabel:
+                            id: quiz_result
+                            text: ""
+                            #font_name: "CODE2000"
+                            font_name: "assets/font/CODE2000.TTF"
+                            font_size: sp(24)
+                            halign: "center"
+                            valign: "middle"
+                            text_size: self.width, None
+                            size_hint_y: None
+                            height: dp(60)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # SCORE
+                        MDLabel:
+                            id: quiz_score_label
+                            text: ""
+                            #font_name: "CODE2000"
+                            font_name: "assets/font/CODE2000.TTF"
+                            halign: "center"
+                            font_style: "H6"
+                            size_hint_y: None
+                            height: dp(40)
+                            theme_text_color: "Custom"
+                            text_color: 1, 1, 1, 1
+
+                        # NEXT QUESTION
+                        MDRaisedButton:
+                            text: "NEXT QUESTION"
+                            size_hint: 1,1
+                            #size_hint: None, None
+                            #size: dp(180), dp(48)
+                            pos_hint: {"center_x": .5}
+                            on_release: root.next_quiz_question()
+
+                         # QUIT QUIZ
+                        MDRaisedButton:
+                            id: quit_quiz
+                            text: "Quit Quiz"
+                            size_hint: 1,1
+                            #size_hint: None, None
+                            #size: dp(200), dp(48)
+                            pos_hint: {"center_x": .5}
+                            on_release: root.quit_quiz()
+
+                        Widget:
+                            size_hint_y: None
+                            height: dp(20)
