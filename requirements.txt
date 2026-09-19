@@ -1,6 +1,0 @@
-kivy 2.0
-kivymd 1.2.0
-
-
-
-source.include_exts = py,png,jpg,jpeg,kv,atlas,ttf,otf,mp3,wav,ogg
